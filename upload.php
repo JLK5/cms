@@ -4,15 +4,24 @@ if(!empty($_POST)) {
     $postTitle = $_POST['postTitle'];
     $postDescription = $_POST['postDescription'];
     $targetDirectory = "img/";
-    $fileName = $_FILES['file']['name'];
-    move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
+    //$fileName = $_FILES['file']['name'];
+
+    $fileName = hash('sha256', $_FILES['file']['name'].time());
+    //move_uploaded_file($_FILES['file']['tmp_name'], $targetDirectory.$fileName);
+
+    $fileString = file_get_contents($_FILES['file']['tmp_name']);
+    $gdImage = imagecreatefromstring($fileString);
+    $internalUrl = "img/".$fileName.".webp";
+    
+    $finalUrl = "http://localhost/cms/img/".$fileName.".webp";
+    imagewebp($gdImage, $finalUrl);
 
     $authorID = 1;
-    $imageUrl = "http://localhost/cms/img/".$fileName;
+
 
     $db = new mysqli('localhost', 'root', '', 'titter');
     $q = $db->prepare("INSERT INTO post (author, imgUrl, title) VALUES (?, ?, ?)");
-    $q->bind_param("iss", $authorID, $imageUrl, $postTitle);
+    $q->bind_param("iss", $authorID, $finalUrl, $postTitle);
     $q->execute();
 }
 
