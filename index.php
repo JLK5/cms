@@ -14,7 +14,7 @@
     <div id="container">
         <?php 
         $db = new mysqli('localhost', 'root', '', 'titter');
-        $q = $db->prepare("SELECT post.ID_P, post.imgURl, post.title, 
+        $q = $db->prepare("SELECT post.ID_P, post.imgUrl, post.title, 
         post.timestamp, user.login 
         FROM `post` INNER JOIN user 
         ON post.author = user.ID_U;");
