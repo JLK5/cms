@@ -1,5 +1,5 @@
 <?php
-if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
+if(isset($_REQUEST['email']) && $_REQUEST['action'] == "login") {
     $email = $_REQUEST['email'];
     $password = $_REQUEST['password'];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -23,14 +23,28 @@ if(isset($_REQUEST['email']) && isset($_REQUEST['password'])) {
             echo "Błędny login lub hasło <br>";
         }
     }
-    var_dump($userRow);
 }
+if(isset($_REQUEST['email']) && $_REQUEST['action'] == "register") {
 
+}
 ?>
-<form action="login.php" method="get">
+<h1>Zaloguj się</h1>
+<form action="login.php" method="post">
     <label for="emailInput">Email:</label>
     <input type="email" name="email" id="emailInput">
     <label for="passwordInput">Hasło:</label>
     <input type="password" name="password" id="passwordInput">
     <input type="submit" value="Zaloguj">
+</form>
+
+<h1>Zarejestruj się</h1>
+<form action="login.php" method="post">
+    <label for="emailInput">Email:</label>
+    <input type="email" name="email" id="emailInput">
+    <label for="passwordInput">Hasło:</label>
+    <input type="password" name="password" id="passwordInput">
+    <label for="passwordRepeat">Potwierdź hasło:</label>
+    <input type="password" name="password" id="passwordRepeat">
+    <input type="hidden" name="action" value="register">
+    <input type="submit" value="Zarejestruj">
 </form>
