@@ -1,5 +1,5 @@
 <?php
-if(isset($_REQUEST['email']) && $_REQUEST['action'] == "login") {
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
     $email = $_REQUEST['email'];
     $password = $_REQUEST['password'];
     $email = filter_var($email, FILTER_SANITIZE_EMAIL);
@@ -24,8 +24,27 @@ if(isset($_REQUEST['email']) && $_REQUEST['action'] == "login") {
         }
     }
 }
-if(isset($_REQUEST['email']) && $_REQUEST['action'] == "register") {
 
+if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register") {
+    $db = new mysqli("localhost", "root", "", "titter");
+    $email = $_REQUEST['email'];
+    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
+    $password = $_REQUEST['password'];
+    $passwordRepeat = $_REQUEST['passwordRepeat'];
+    
+    if($password == $passwordRepeat) {
+        $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
+        $password = password_hash($password, PASSWORD_ARGON2I);
+        $q->bind_param("ss", $email, $password);
+        $result = $q->execute();
+        if($result) {
+            echo "Konto utworzone poprawnie";
+        } else {
+            echo "coś poszło nie tak";
+        } 
+    } else {
+        echo "hasła nie są takie same, spróbuj ponwnie";
+    }
 }
 ?>
 <h1>Zaloguj się</h1>
@@ -34,6 +53,7 @@ if(isset($_REQUEST['email']) && $_REQUEST['action'] == "register") {
     <input type="email" name="email" id="emailInput">
     <label for="passwordInput">Hasło:</label>
     <input type="password" name="password" id="passwordInput">
+    <input type="hidden" name="action" value="login">
     <input type="submit" value="Zaloguj">
 </form>
 
@@ -43,8 +63,8 @@ if(isset($_REQUEST['email']) && $_REQUEST['action'] == "register") {
     <input type="email" name="email" id="emailInput">
     <label for="passwordInput">Hasło:</label>
     <input type="password" name="password" id="passwordInput">
-    <label for="passwordRepeat">Potwierdź hasło:</label>
-    <input type="password" name="password" id="passwordRepeat">
+    <label for="passwordRepeatInput">Potwierdź hasło:</label>
+    <input type="password" name="passwordRepeat" id="passwordRepeatInput">
     <input type="hidden" name="action" value="register">
     <input type="submit" value="Zarejestruj">
 </form>
