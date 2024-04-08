@@ -1,49 +1,25 @@
 <?php
+session_start();
+require("./class/user.class.php");
+?>
+<?php
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "login") {
-    $email = $_REQUEST['email'];
-    $password = $_REQUEST['password'];
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    $db = new mysqli("localhost", "root", "", "titter");
-    $q = $db->prepare("SELECT * FROM user WHERE email = ? LIMIT 1");
-    $q->bind_param("s", $email);
-    $q->execute();
-    $result = $q->get_result();
-    
-    $userRow = $result->fetch_assoc();
-    if($userRow == null){
+    $result = User::Login($_REQUEST['email'], $_REQUEST['password']);
+    if($result){
         //incorrect login
-        echo "Błędny login lub hasło <br>";
+        echo "Logged in";
     } else {
-        //correct login
-        if(password_verify($password, $userRow['password'])){
-            //correct password
-            echo "Zalogowano! <br>";
-        }else {
-            //incorrect password
-            echo "Błędny login lub hasło <br>";
-        }
+        //correct login 
+        echo "Login or Password Incorrect";
     }
 }
 
 if(isset($_REQUEST['action']) && $_REQUEST['action'] == "register") {
-    $db = new mysqli("localhost", "root", "", "titter");
-    $email = $_REQUEST['email'];
-    $email = filter_var($email, FILTER_SANITIZE_EMAIL);
-    $password = $_REQUEST['password'];
-    $passwordRepeat = $_REQUEST['passwordRepeat'];
-    
-    if($password == $passwordRepeat) {
-        $q = $db->prepare("INSERT INTO user VALUES (NULL, ?, ?)");
-        $password = password_hash($password, PASSWORD_ARGON2I);
-        $q->bind_param("ss", $email, $password);
-        $result = $q->execute();
-        if($result) {
-            echo "Konto utworzone poprawnie";
-        } else {
-            echo "coś poszło nie tak";
-        } 
+    $result = User::Register($_REQUEST['email'], $_REQUEST['password']);
+    if($result) {
+        echo "Register correct";
     } else {
-        echo "hasła nie są takie same, spróbuj ponwnie";
+        echo "Register Failed";
     }
 }
 ?>
