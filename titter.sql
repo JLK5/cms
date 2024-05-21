@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 08 Kwi 2024, 13:25
--- Wersja serwera: 10.4.24-MariaDB
--- Wersja PHP: 8.0.19
+-- Generation Time: May 21, 2024 at 10:51 PM
+-- Server version: 10.4.28-MariaDB
+-- PHP Version: 8.2.4
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Baza danych: `titter`
+-- Database: `titter`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `comment`
+-- Table structure for table `comment`
 --
 
 CREATE TABLE `comment` (
@@ -33,12 +33,12 @@ CREATE TABLE `comment` (
   `post` int(11) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   `content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `post`
+-- Table structure for table `post`
 --
 
 CREATE TABLE `post` (
@@ -47,12 +47,12 @@ CREATE TABLE `post` (
   `imgUrl` varchar(128) NOT NULL,
   `title` varchar(128) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `rating`
+-- Table structure for table `rating`
 --
 
 CREATE TABLE `rating` (
@@ -60,35 +60,33 @@ CREATE TABLE `rating` (
   `post` int(11) NOT NULL,
   `user` int(11) NOT NULL,
   `score` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabeli dla tabeli `user`
+-- Table structure for table `user`
 --
 
 CREATE TABLE `user` (
   `id` int(11) NOT NULL,
   `email` varchar(128) NOT NULL,
   `password` varchar(128) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Zrzut danych tabeli `user`
+-- Dumping data for table `user`
 --
 
 INSERT INTO `user` (`id`, `email`, `password`) VALUES
-(1, 'thecompany@work.die', '$argon2i$v=19$m=16,t=2,p=1$SWk3UVE2aWFNc3U2dFJ6Mw$jP4lsgutjl95us9VrOMIOw'),
-(3, 'joe@biden.us', '$argon2i$v=19$m=65536,t=4,p=1$S01PekRCOHZ2RWxuMDFaVQ$IL4dfY1O3yuLLANb+2F7/0e/QEcfnSPp30Coz27D9lI'),
-(4, 'test@test.pl', '$argon2i$v=19$m=65536,t=4,p=1$UXdvLmRNVXRiZVg1aGg0UQ$5HUoUw3Tw45hnJpvgikCzDbFHsoi/ZuUhU4sp1Q3Q9E');
+(5, 'test@test.com', '$argon2i$v=19$m=65536,t=4,p=1$QTBWMmtVcmd4bXpiMzhEUQ$APpcd0BBn2DJwA5FMiiGezXrVtho9c1mIgnLQ6XE4VI');
 
 --
--- Indeksy dla zrzutów tabel
+-- Indexes for dumped tables
 --
 
 --
--- Indeksy dla tabeli `comment`
+-- Indexes for table `comment`
 --
 ALTER TABLE `comment`
   ADD PRIMARY KEY (`id`),
@@ -96,14 +94,14 @@ ALTER TABLE `comment`
   ADD KEY `post` (`post`);
 
 --
--- Indeksy dla tabeli `post`
+-- Indexes for table `post`
 --
 ALTER TABLE `post`
   ADD PRIMARY KEY (`id`),
   ADD KEY `author` (`author`);
 
 --
--- Indeksy dla tabeli `rating`
+-- Indexes for table `rating`
 --
 ALTER TABLE `rating`
   ADD PRIMARY KEY (`id`),
@@ -111,58 +109,58 @@ ALTER TABLE `rating`
   ADD KEY `user` (`user`);
 
 --
--- Indeksy dla tabeli `user`
+-- Indexes for table `user`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT dla zrzuconych tabel
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT dla tabeli `comment`
+-- AUTO_INCREMENT for table `comment`
 --
 ALTER TABLE `comment`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT dla tabeli `post`
+-- AUTO_INCREMENT for table `post`
 --
 ALTER TABLE `post`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT dla tabeli `rating`
+-- AUTO_INCREMENT for table `rating`
 --
 ALTER TABLE `rating`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT dla tabeli `user`
+-- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- Ograniczenia dla zrzutów tabel
+-- Constraints for dumped tables
 --
 
 --
--- Ograniczenia dla tabeli `comment`
+-- Constraints for table `comment`
 --
 ALTER TABLE `comment`
   ADD CONSTRAINT `comment_ibfk_1` FOREIGN KEY (`post`) REFERENCES `post` (`id`) ON UPDATE CASCADE,
   ADD CONSTRAINT `comment_ibfk_2` FOREIGN KEY (`user`) REFERENCES `user` (`id`) ON UPDATE CASCADE;
 
 --
--- Ograniczenia dla tabeli `post`
+-- Constraints for table `post`
 --
 ALTER TABLE `post`
   ADD CONSTRAINT `post_ibfk_1` FOREIGN KEY (`author`) REFERENCES `user` (`id`) ON UPDATE CASCADE;
 
 --
--- Ograniczenia dla tabeli `rating`
+-- Constraints for table `rating`
 --
 ALTER TABLE `rating`
   ADD CONSTRAINT `rating_ibfk_1` FOREIGN KEY (`post`) REFERENCES `post` (`id`) ON UPDATE CASCADE,

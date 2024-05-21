@@ -9,6 +9,13 @@ header {
     padding: 10px;
     background-color: darkcyan;
 }
+.container {
+    color: rgba(214, 214, 214, 0.829);
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    margin: 10px;
+}
 div.post-block {
     width: 50vw;
     margin: 0 auto;
